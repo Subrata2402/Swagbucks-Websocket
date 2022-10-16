@@ -6,6 +6,7 @@ It is a websocket of Swagbucks Live game. To use this websocket you can play liv
   - Put all details in [config.py](https://github.com/Subrata2402/Swagbucks-Websocket/blob/main/config.py) file
   - Put usernames in 12 no. line of [swagbucks.py](https://github.com/Subrata2402/Swagbucks-Websocket/blob/b4c9a07074e7987cbe0ccad057e186a3fad73ae2/swagbucks.py#L12)
   - Login may be not working so you should insert data in mongo db to this format
+  ```
   {
       "user_id": 123652319,
       "username": "baldric3250schne",
@@ -16,3 +17,4 @@ It is a websocket of Swagbucks Live game. To use this websocket you can play liv
       "email_id": "baldric3250schneider@gmail.com",
       "password": "Subrata@2001"
   }
+  ```
