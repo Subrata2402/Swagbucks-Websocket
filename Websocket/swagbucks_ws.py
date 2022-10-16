@@ -77,7 +77,6 @@ class SbWebSocket(object):
 			"note": self.note, "useLife": "true", "appid": "37",
 			"appversion": "34", "sig": "", # parter hash
 		}
-		# post_data = f"token={token}&gameID={str(self.game_id)}&price=0&questionNumber={question_number}&note={self.note}&useLife=true&appid=37&appversion=34&sig={signed[self.username]}"
 		headers = {
 			"content-type": "application/x-www-form-urlencoded",
 			"Host": "app.swagbucks.com",
@@ -119,10 +118,6 @@ class SbWebSocket(object):
 			allow_rebuy = self.data["whenIncorrect"]["allowRebuy"]
 		else:
 			return None
-		# params = {
-		# 	"vid": self.vid, "useLife": "true", "partnerHash": self.partner_hash,
-		# 	#"_device": "c1cd7fc0-4bd5-4026-bc7d-aaa4199b7873"
-		# }
 		if allow_rebuy:
 			partner_hash = await self.get_partner_hash(question_number)
 			if not partner_hash: return 
@@ -135,11 +130,6 @@ class SbWebSocket(object):
 		If lost the game, Swagbucks asked to confirm to take bonus sb.
 		Then you need confirm sb to credited sb in Swagbucks wallet.
 		"""
-		# params = {
-		# 	"vid": self.vid, "useLife": "true", "partnerHash": self.partner_hash,
-		# 	#"_device": "c1cd7fc0-4bd5-4026-bc7d-aaa4199b7873"
-		# }
-		
 		post_data = f"vid={self.vid}"
 		data = await self.fetch("POST", "trivia/confirm_sb", headers = self.headers, data = post_data)
 		await self.send_hook("\n```\n{} | {}\n```".format(data, self.username))
@@ -149,24 +139,13 @@ class SbWebSocket(object):
 		After end of the game check the details of winnings 
 		and how many sb earn from the live game.
 		"""
-		# params = {"vid": self.vid}
 		post_data = f"vid={self.vid}"
 		data = await self.fetch("POST", "trivia/complete", headers = self.headers, data = post_data)
-		# success = data.get("success")
-		# if success:
-		# 	await self.send_hook("Successfully complete the game.")
-		# 	winner = data.get("winner")
-		# 	sb = data.get("sb")
-		# 	await self.send_hook("You **{}** the game and got **{} SB**!".format('won' if winner else 'lost', sb))
-		# else:
-		# 	await self.send_hook("Failed to complete the game.\n```\n{}\n```".format(data))
 		await self.send_hook("\n```\n{} | {}\n```".format(data, self.username))
-		
 		confirm = data["confirm"]
 		winner = data["winner"]
 		if confirm and not winner:
 			await self.confirm_sb()
-			# await self.send_hook("\n```\n{}\n```".format(data))
 
 	
 	async def get_ws(self) -> None:
@@ -223,7 +202,7 @@ class SbWebSocket(object):
 				embed = discord.Embed(title = f"Question {question_number} out of {total_question}", url = "https://google.com")
 				await self.send_hook(embed = embed)
 				def check(message):
-					return message.author.id == config.USER_ID
+					return message.author.id == config.USER_ID and message.channel.id == config.CHANNEL_ID
 				while True:
 					try:
 						user_input = await self.client.wait_for("message", timeout = 10.0, check = check)
@@ -276,10 +255,7 @@ class SwagbucksLive(SbWebSocket):
 		params = {
 			"emailAddress": email_id,
 			"pswd": password,
-			# "persist": "on", "showmeter": "0",
 			"sig": "", # "sig": "https://www.swagbucks.com/?f=1",
-			# "advertiserID": "e1cbd4d6-3aea-4144-82b9-2a70b8458f5b",
-			# "modelNumber": "RMX1911829", "osVersion": "10",
 			"appversion": "34",
 			"appid": "37"
 		}
@@ -300,14 +276,6 @@ class SwagbucksLive(SbWebSocket):
 		token = data["token"]
 		sig = data["sig"]
 		
-		# params = {
-		# 	"_device": "c1cd7fc0-4bd5-4026-bc7d-aaa4199b7873",
-		# 	"partnerMemberId": user_id,
-		# 	"partnerUserName": username,
-		# 	"verify": "false",
-		# 	"partnerApim": "1",
-		# 	"partnerHash": sig
-		# }
 		
 		data = f"_device=f6acc085-c395-4688-913f-ea2b36d4205f&partnerMemberId={user_id}&partnerUserName={username}&verify=false&partnerApim=1&partnerHash={sig}"
 		data = await self.fetch("POST", "auth/token", headers = headers, data = data)
