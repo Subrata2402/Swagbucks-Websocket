@@ -3,53 +3,56 @@ from Websocket.swagbucks_ws import SbWebSocket, SwagbucksLive
 from discord.ext import commands
 import db
 import config
-# import server
 
 class SwagbucksTrivia(commands.Cog, SwagbucksLive):
 	
 	def __init__(self, client: commands.Bot):
 		super().__init__(client)
 		self.client = client
-		self.usernames = ["bernfried3250ber", "baldric3250schn4", "bernfried32", "sakhman32", "sakhman3250s1", "sakhman3250s2"]
+		self.usernames = [] # list of username of swagbucks account  
 
 	@commands.Cog.listener()
 	async def on_ready(self):
-		print(self.client.user.name)
+		print(f"{self.client.user.name} is Ready!")
 		game = discord.Game("Swagbucks Live")
 		await self.client.change_presence(status=discord.Status.dnd, activity=game)
+		
+		# play swagbucks account automatically
+		# if you want start manualy then comment out this 3 lines
 		for username in self.usernames:
 			ws = SbWebSocket(self.client, username)
 			self.client.loop.create_task(ws.connect_websocket())
 
-	# @commands.command()
-	# @commands.is_owner()
-	# async def sbstart(self, ctx: commands.Context, username: str = None):
-	# 	"""
-	# 	Check and open a websocket by username.
-	# 	"""
-	# 	if not username:
-	# 		return await ctx.send("username is required!")
-	# 	ws = SbWebSocket(self.client, username)
-	# 	await ws.get_ws()
-	# 	if ws.ws:
-	# 		if ws.ws.open:
-	# 			return await ws.send_hook("Websocket Already Opened!")
-	# 	await ws.send_hook("Websocket Connecting...")
-	# 	await ws.connect_websocket()
+
+	@commands.command()
+	@commands.is_owner()
+	async def sbstart(self, ctx: commands.Context, username: str = None):
+		"""
+		Check and open a websocket by username. 
+		"""
+		if not username:
+			return await ctx.send("Uername is required!")
+		ws = SbWebSocket(self.client, username)
+		await ws.get_ws()
+		if ws.ws:
+			if ws.ws.open:
+				return await ws.send_hook("Websocket Already Opened!")
+		await ws.send_hook("Websocket Connecting...")
+		await ws.connect_websocket()
 		
 		
-	# @commands.command()
-	# @commands.is_owner()
-	# async def sbclose(self, ctx: commands.Context, username: str = None):
-	# 	"""
-	# 	Close a websocket by username.
-	# 	"""
-	# 	ws = SbWebSocket(self.client, username.lower())
-	# 	await ws.close_ws()
+	@commands.command()
+	@commands.is_owner()
+	async def sbclose(self, ctx: commands.Context, username: str = None):
+		"""
+		Close a websocket by username.
+		"""
+		ws = SbWebSocket(self.client, username.lower())
+		await ws.close_ws()
 	
 	# @commands.command()
 	# @commands.is_owner()
-	# async def sblogin(self, ctx, email_id: str = None, password: str = None):
+	# async def sblogin(self, ctx: commands.Context, email_id: str = None, password: str = None):
 	# 	"""
 	# 	Login a Swagbucks account and stored some required details in the database.
 	# 	"""
@@ -79,7 +82,7 @@ class SwagbucksTrivia(commands.Cog, SwagbucksLive):
 		await self.account_details(username.lower())
 		
 	
-	@commands.command()
+	@commands.command(name="sbaccounts", aliases=["sbacc"])
 	@commands.is_owner()
 	async def sbaccounts(self, ctx: commands.Context):
 		"""
@@ -93,9 +96,9 @@ class SwagbucksTrivia(commands.Cog, SwagbucksLive):
 			return await ctx.send("No accounts found.")
 		await ctx.send("```\n{}\n```".format(description))
 		
-	@commands.command()
+	@commands.command(name="sbbalance", aliases=["sbbal"])
 	@commands.is_owner()
-	async def sbbal(self, ctx: commands.Context):
+	async def sbbalance(self, ctx: commands.Context):
 		"""
 		Get all accounts Swagbucks details, stored in the database.
 		"""
@@ -119,18 +122,8 @@ class SwagbucksTrivia(commands.Cog, SwagbucksLive):
 		ws = SwagbucksLive(self.client, username)
 		await ws.show_details()
 		
-	# @commands.command()
-	# async def sbtoken(self, ctx, email_id: str = None, password: str = None):
-	# 	if ctx.guild:
-	# 		return await ctx.send("Please use this command in Private Messages.")
-	# 	if not email_id or not password:
-	# 		return await ctx.send("Username or Password is required to login to Swagbucks.")
-	# 	token = await self.login(email_id, password, "GET")
-	# 	await ctx.send("```\n{}\n```".format(token))
-		
+
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix = ">", intents = intents, strip_after_prefix = True, case_insensitive = True)
-# client.remove_command('help')
 client.add_cog(SwagbucksTrivia(client))
-# server.keep_alive()
 client.run(config.BOT_TOKEN)
