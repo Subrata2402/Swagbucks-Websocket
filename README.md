@@ -9,13 +9,13 @@ It is a websocket of Swagbucks Live game. To use this websocket you can play liv
 
   ```
   {
-      "user_id": 123652319,
-      "username": "baldric3250schne",
-      "access_token": "COjBzVzAFpEnZ-Q1R-J4tT5DaUrq6kfnrJ6OfUe0m20C9J76CPW-Mp48D-nLjAdQ0ukrhm…",
-      "refresh_token": "COjBzS8lDa2uQnM6j7u3WamSovfWzY_2BlsQ8h-5_KaKG7HAkpYDspCbaRGDgSOqOKNmKz…",
-      "token": "123652319~0dbd3f436469290e4d44be5b831e9963~mpODKaqKxwH6",
-      "sig": "ea65dd733d983732775be55946e950a33bdb487bfbc57756c719b9843edc0c14",
-      "email_id": "baldric3250schneider@gmail.com",
-      "password": "Subrata@2001"
+      "user_id": 1236...,
+      "username": "ba...",
+      "access_token": "COjBzVzAFpEnZ-Q1R-J4tT5DaUrq6kfnrJ6OfUe0m20C9J76CPW-Mp48D-nLjAdQ0ukrhm...",
+      "refresh_token": "COjBzS8lDa2uQnM6j7u3WamSovfWzY_2BlsQ8h-5_KaKG7HAkpYDspCbaRGDgSOqOKNmKz...",
+      "token": "123652319~0dbd3f436469290e4d44be5b831e9963~mpOD...",
+      "sig": "ea65dd733d983732775be55946e950a33bdb487bfbc57756c719b9843...",
+      "email_id": "xyz@gmail.com",
+      "password": "Hsn:KHKEJejwnc"
   }
   ```
