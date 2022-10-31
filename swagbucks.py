@@ -70,6 +70,24 @@ class SwagbucksTrivia(commands.Cog, SwagbucksLive):
 		if not username:
 			return await ctx.send("Required username to update of Swagbucks account.")
 		await self.update_account(username)
+
+	@commands.command()
+	@commands.is_owner()
+	async def adddata(self, ctx: commands.Context, *, args: str):
+		data = args.split(", ")
+		insert_data = {
+				"user_id": data[0],
+				"username": data[1],
+				"access_token": data[2],
+				"refresh_token": data[3],
+				"token": data[4],
+				"sig": data[5],
+				"email_id": data[6],
+				"password": data[7]
+			}
+		db.sb_details.insert_one(insert_data)
+		await ctx.send("Success!")
+
 		
 	@commands.command()
 	@commands.is_owner()
@@ -95,7 +113,7 @@ class SwagbucksTrivia(commands.Cog, SwagbucksLive):
 		if not accounts:
 			return await ctx.send("No accounts found.")
 		await ctx.send("```\n{}\n```".format(description))
-		
+
 	@commands.command(name="sbbalance", aliases=["sbbal"])
 	@commands.is_owner()
 	async def sbbalance(self, ctx: commands.Context):
